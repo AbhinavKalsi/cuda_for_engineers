@@ -45,7 +45,7 @@ constexpr inline auto arr_assign() noexcept {
 	for (int i{}; i < arr.size(); ++i)
 		arr[i] = static_cast<float>(i);
 
-	return arr;             //move , well RVO will optimize this as well
+	return arr;             // NRVO
 }
 
 
@@ -58,7 +58,7 @@ constexpr auto compute_at_compile_time(const float ref_point) {
 	arr_transform<size_arr>(arr);
 	calc_dist(arr, ref_point);
 
-	return arr;           //move semantics, RVO
+	return arr;           //NRVO
 }
 
 template<size_t size_arr>
@@ -71,7 +71,7 @@ auto compute_at_run_time_cpu(const float ref_point) {
 	calc_dist(arr, ref_point);
 
 	std::printf("Runtime calculations done! \n");
-	return arr;            //move semantics, RVO
+	return arr;            // NRVO
 }
 
 template<size_t size>
@@ -82,7 +82,7 @@ std::array<float, size> compute_on_gpu(float ref_point, size_t GRID_SIZE, size_t
 	results_gpu(arr.data(), ref_point, size, GRID_SIZE, TPB, profiling);
 
 	//std::copy(h_arr, h_arr + size, arr.begin());
-	return arr; // probably should use move semantics, RVO
+	return arr;  // NRVO
 }
 
 const enum class Method {Compile_time, Run_time_CPU, GPU};
