@@ -102,7 +102,7 @@ constexpr std::array<float, size> compute(Method method, float ref_point) {
 template<size_t size>
 [[nodiscard]]
 std::array<float, size> compute(Method method, float ref_point, size_t GRID_SIZE, size_t TPB, bool profiling = false) {
-	assert(size > 1 && "size msut be greater than 1!");
+	assert(size > 1 && "size msut be greater than 1!");   //change it to static assert
 	assert(method == Method::GPU && "Method::Compile_time/Run_time_CPU invoked with extra parameters, remove GRID_SIZE and TPB!");
 	return compute_on_gpu<size>(ref_point, GRID_SIZE, TPB, profiling);
 }

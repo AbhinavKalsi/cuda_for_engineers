@@ -23,7 +23,7 @@ __global__ void normalize_and_calc_dist(float* arr, size_t size, float ref_point
 __host__ void results_gpu(float* arr, float ref_point, const size_t size, size_t GRID_SIZE, size_t TPB, bool profiling) {
 	float* d_arr{};
 
-	checkCudaError(cudaMalloc(&d_arr, size * sizeof(float)));  //need to build RAII for cudaMalloc.
+	DeviceMemoryAlloc device_array{&d_arr, sizeof(float) * size}; 
 	
 	Timing kernel_time;
 	
@@ -38,7 +38,6 @@ __host__ void results_gpu(float* arr, float ref_point, const size_t size, size_t
 	checkCudaError(cudaMemcpy(arr, d_arr, size * sizeof(float), cudaMemcpyDeviceToHost));
 	memcpy_time.stop();
 
-	checkCudaError(cudaFree(d_arr));
 	if (profiling) {
 		std::printf("Performance Measurment using Cuda Events\n");
 		std::printf("----------------------------------------\n");
